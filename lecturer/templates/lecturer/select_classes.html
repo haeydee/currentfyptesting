@@ -1,0 +1,12 @@
+{% extends 'lecturer/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<h2>Select Classes You Teach</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+{% endblock %}

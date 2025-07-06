@@ -1,0 +1,32 @@
+{% extends 'lecturer/base.html' %}
+
+{% block content %}
+    <!DOCTYPE html>
+    <html>
+    <h2>Supervisor Dashboard</h2>
+
+    <h3>Pending Requests</h3>
+        <ul>
+            {% for req in pending_requests %}
+                <li>
+                    {{ req.student.nama }} - {{ req.fyp_title|default:"No Title" }}
+                    <form action="{% url 'approve_request' req.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Approve</button>
+                    </form>
+                </li>
+            {% empty %}
+                <li>No pending requests.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>My Supervised Students</h3>
+        <ul>
+            {% for req in approved_students %}
+                <li>{{ req.student.nama }} - {{ req.fyp_title|default:"No Title" }}</li>
+            {% empty %}
+                <li>No students under supervision yet.</li>
+            {% endfor %}
+        </ul>
+    </html>
+{% endblock %}

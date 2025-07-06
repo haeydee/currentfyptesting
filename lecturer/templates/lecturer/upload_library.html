@@ -1,0 +1,21 @@
+{% extends 'lecturer/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    {% if request.user.is_superuser %}
+        <div style="max-width: 600px; margin: 50px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center;">Upload Report</h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div style="text-align: center;">
+                    <button type="submit" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px;">
+                        Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}
