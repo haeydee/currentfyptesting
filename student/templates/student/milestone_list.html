@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if crumbs %}
+  {% include 'partials/breadcrumbs.html' %}
+{% endif %}
+
+<h2>My Milestones</h2>
+<a href="{% url 'milestone_add' %}" class="btn btn-success mb-3">Add New Milestone</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for milestone in milestones %}
+        <tr>
+            <td>{{ milestone.title }}</td>
+            <td>{{ milestone.due_date }}</td>
+            <td>
+                {% if milestone.is_completed %}
+                    ✅ Completed
+                {% else %}
+                    ❌ Incomplete
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'milestone_toggle' milestone.pk %}" class="btn btn-sm btn-warning">Toggle</a>
+                <a href="{% url 'milestone_edit' milestone.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                <a href="{% url 'milestone_delete' milestone.pk %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No milestones yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

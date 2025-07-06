@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+{% extends 'student/base.html' %}
+
+{% block content %}
+    <h2>Student Profile</h2>
+    <ul>
+    <li><strong>Name:</strong> {{ student.nama }}</li>
+    <li><strong>Student ID:</strong> {{ student.no_pelajar }}</li>
+    <li><strong>Program:</strong> {{ student.program }}</li>
+    <li><strong>Kursus Code:</strong> {{ student.kod_kursus }}</li>
+    <li><strong>Kumpulan:</strong> {{ student.kumpulan.name }}</li>
+    </ul>
+{% endblock %}

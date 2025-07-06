@@ -1,0 +1,264 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .navbar {
+    background-color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+  }
+  .navbar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .navbar span {
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-toggle {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  .dropdown.active .dropdown-content {
+    display: block;
+  }
+
+  .main-content {
+    display: flex;
+    padding: 20px;
+    gap: 80px;
+  }
+  .fyp-info {
+    flex: none;
+  }
+  .fyp-info h2 {
+    margin-bottom: 8px;
+  }
+  .progress-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(#28a745 {{ progress }}%, #e9ecef 0%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .lower-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 20px;
+  }
+
+  .milestone-box, .notes-box {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+  }
+
+  .milestone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .milestone-options .dot {
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .milestone-dropdown {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 30px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 140px;
+    z-index: 1;
+  }
+
+  .milestone-dropdown a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+  }
+
+  .milestone-dropdown a:hover {
+    background-color: #f0f0f0;
+  }
+
+  .milestone-options:hover .milestone-dropdown {
+    display: block;
+  }
+
+  .notes-box textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: vertical;
+  }
+
+  textarea {
+    width: 100%;
+    height: 200px;
+    resize: vertical;
+    padding: 10px;
+  }
+  .dashboard-icons {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 20px;
+  }
+  .dashboard-icons a {
+    text-align: center;
+    text-decoration: none;
+    color: black;
+  }
+  .dashboard-icons img {
+    width: 50px;
+    height: 50px;
+  }
+</style>
+
+<script>
+  function toggleDropdown() {
+    document.querySelector('.dropdown').classList.toggle('active');
+  }
+</script>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div style="display: flex; align-items: center;">
+    <img src="{{ student.profile_picture|default:'' }}" 
+         onerror="this.onerror=null;this.src='{% static 'icons/default.png' %}'"
+         alt="Profile">
+    <span>{{ student.nama }}</span>
+  </div>
+  <div class="dropdown">
+    <span class="dropdown-toggle" onclick="toggleDropdown()">☰</span>
+    <div class="dropdown-content">
+      <a href="{% url 'supervisor_request' %}">Supervisor</a>
+      <a href="{% url 'profile' %}">Profile</a>
+      <a href="{% url 'logout' %}">Logout</a>
+    </div>
+  </div>
+</div>
+
+<!-- TOP SECTION -->
+<div class="main-content">
+  <div class="fyp-info">
+    <h2>FYP PROJECT</h2>
+    <p><strong>Title:</strong> {{ student.fyp_title|default:"Not Set" }}</p>
+    <p><strong>Supervisor:</strong> {{ student.supervisor.nama|default:"Not Assigned" }}</p>
+  </div>
+  <div class="progress-circle">
+    {{ progress }}%
+  </div>
+</div>
+
+<!-- ICON NAVIGATION -->
+<div class="dashboard-icons">
+  <a href="{% url 'material_list' %}">
+    <img src="{% static 'icons/material.png' %}" alt="FYP Material">
+    <p>FYP Material</p>
+  </a>
+  <a href="{% url 'submission' %}">
+    <img src="{% static 'icons/submission.png' %}" alt="Submission">
+    <p>Submission</p>
+  </a>
+  <a href="{% url 'library' %}">
+    <img src="{% static 'icons/library.png' %}" alt="Library">
+    <p>Library</p>
+  </a>
+</div>
+
+<!-- LOWER SECTION: MILESTONES AND NOTES -->
+<div class="lower-section">
+  <div class="milestone-box">
+    <div class="milestone-header">
+      <h4>Milestones</h4>
+      <div class="milestone-options">
+        <span class="dot">⋮</span>
+        <div class="milestone-dropdown">
+          <a href="{% url 'milestone_list' %}">Add Milestone</a>
+        </div>
+      </div>
+    </div>
+
+    <ul>
+      {% if milestones %}
+        {% for m in milestones %}
+          <li>{{ m.title }} - {{ m.due_date|default:"No due date" }} - {% if m.is_completed %}✅{% else %}❌{% endif %}</li>
+        {% endfor %}
+      {% else %}
+        <li>No milestones found.</li>
+      {% endif %}
+    </ul>
+</div>
+
+  <div class="notes-box">
+  <h4>Notes</h4>
+  <textarea id="notes" placeholder="Write your notes here...">{{ student.notes }}</textarea>
+</div>
+
+<script>
+  document.getElementById("notes").addEventListener("blur", function () {
+    const notes = this.value;
+
+    fetch("{% url 'save_notes' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({ notes: notes })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Notes saved:", data);
+    });
+  });
+</script>
+
+{% endblock %}

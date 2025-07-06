@@ -1,0 +1,22 @@
+{% extends 'student/base.html' %}
+
+{% block content %}
+
+{% if crumbs %}
+  {% include 'partials/breadcrumbs.html' %}
+{% endif %}
+
+<h2>FYP Report Library</h2>
+<ul>
+  {% for file in files %}
+    <li>
+      <a href="{{ file.webViewLink }}" target="_blank">{{ file.name }}</a>
+      (Uploaded on {{ file.createdTime|date:"Y-m-d" }})
+    </li>
+  {% empty %}
+    <li>No reports found.</li>
+  {% endfor %}
+</ul>
+
+
+{% endblock %}

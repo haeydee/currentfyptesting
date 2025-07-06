@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% extends "student/base.html" %}
+{% load static %}
+
+{% block content %}
+
+{% if crumbs %}
+  {% include 'partials/breadcrumbs.html' %}
+{% endif %}
+
+<h2>Submission Details</h2>
+<p><strong>Title:</strong> {{ submission.title }}</p>
+<p><strong>Submitted on:</strong> {{ submission.submitted_at|date:"Y-m-d H:i" }}</p>
+<p><strong>File:</strong> <a href="{{ submission.file.url }}">Download</a></p>
+
+<hr>
+
+<h3>Comments / Discussion</h3>
+<ul>
+  {% for comment in comments %}
+    <li>
+      <strong>{{ comment.author }}</strong>: {{ comment.text }} <br>
+      <small>Posted on: {{ comment.timestamp|date:"Y-m-d H:i" }}</small>
+    </li>
+  {% empty %}
+    <li>No comments yet.</li>
+  {% endfor %}
+</ul>
+
+<hr>
+
+<h3>Leave a Comment</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Post Comment</button>
+</form>
+{% endblock %}
+

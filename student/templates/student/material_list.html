@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% extends "student/base.html" %}
+
+{% block content %}
+
+{% if crumbs %}
+  {% include 'partials/breadcrumbs.html' %}
+{% endif %}
+
+<h2>FYP Materials</h2>
+<ul>
+  {% for material in materials %}
+    <li>
+      <strong>{{ material.title }}</strong><br>
+      {{ material.description }}<br>
+      Uploaded at: {{ material.uploaded_at|date:"Y-m-d H:i" }}<br>
+      <a href="{{ material.file.url }}" download>Download</a>
+    </li>
+  {% empty %}
+    <li>No materials available yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
